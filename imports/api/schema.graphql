@@ -94,13 +94,14 @@ type Mutation {
 }
 
 type Subscription {
-	accountCreated(id: ID!): Account
+	accountCreated(publicKey: String, password: HashedPassword): Account
+    transactionAdded(transaction: TransactionInput!): String
 }
 
 type Query {
     transactions: [Transaction]
     operations: [TradeOperation]
-    account: Account
+    account(id: ID!): Account
     operation: TradeOperation
 }
 

@@ -1,0 +1,7 @@
+mutation createAccount($id: ID!, $publicKey: String!, $hashedPassword: HashedPassword!) {
+  createAccount(id: $id, publicKey: $publicKey, hashedPassword: $hashedPassword) {
+    id
+    publicKey
+    hashedPassword
+  }
+}

@@ -3,67 +3,59 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
+import GET_ACCOUNT from '../graphql-queries/getAccount.graphql';
+import GET_ACCOUNT_SUBSCRIPTION from '../graphql-queries/getAccountSubscription.graphql';
+import CREATE_ACCOUNT from '../graphql-queries/createAccount.graphql';
+
 import Loading from './Loading';
 
-const App = ({ currentUser, refetch, userLoading }) => (
+const App = ({ currentAccount, refetch, accountLoading }) => (
     <div className="App">
         <div className="App-block">
-            {userLoading
+            {accountLoading
                 ? <Loading />
                 : <div className="App-content">
                     <input type="text" value="" />
                     <input type="password" value="" />
-                    {currentUser
+                    {currentAccount
                         ? <div>
-                            <pre>{JSON.stringify(currentUser, null, 2)}</pre>
+                            <pre>{JSON.stringify(currentAccount, null, 2)}</pre>
                             <button onClick={() => refetch()}>Refetch the query!</button>
                         </div>
                         : 'Please log in!'}
-                </div>}
+                  </div>}
         </div>
-
     </div>
 );
 
 App.propTypes = {
-    currentUser: PropTypes.object,
+    currentAccount: PropTypes.object,
     hasErrors: PropTypes.bool,
     refetch: PropTypes.func,
-    userLoading: PropTypes.bool,
+    accountLoading: PropTypes.bool,
 };
-
-/*
- * We use `gql` from graphql-tag to parse GraphQL query strings into the standard GraphQL AST
- * See for more information: https://github.com/apollographql/graphql-tag
- */
-const GET_USER_DATA = gql`
-  query getCurrentUser {
-    user {
-      emails {
-        address
-        verified
-      }
-      randomString
-      _id
-    }
-  }
-`;
 
 /*
  * We use the `graphql` higher order component to send the graphql query to our server
  * See for more information: http://dev.apollodata.com/react/
  */
-const withData = graphql(GET_USER_DATA, {
+const withData = graphql(GET_ACCOUNT, {
+        options: (props) => ({
+            variables: {
+                id: "oGuwFj8uPeq3kECEa",
+            },
+        }),
+    }
     // destructure the default props to more explicit ones
-    props: ({ data: { error, loading, user, refetch } }) => {
-        if (loading) return { userLoading: true };
-        if (error) return { hasErrors: true };
-
-        return {
-            currentUser: user,
-            refetch,
-        };
-    },
-});
+    // props: ({ data: { error, loading, id, refetch } }) => {
+    //     if (loading) return { accountLoading: true };
+    //     if (error) return { hasErrors: true };
+        
+    //     return {
+    //         currentAccount: account,
+    //         refetch,
+    //     };
+    // },
+);
 
 export default withData(App);

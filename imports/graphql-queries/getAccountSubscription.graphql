@@ -1,0 +1,7 @@
+subscription accountCreated($id: ID!) {
+  accountCreated(id: $id) {
+    id
+    publicKey
+    hashedPassword
+  }
+}

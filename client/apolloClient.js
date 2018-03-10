@@ -1,12 +1,13 @@
 import { ApolloClient } from 'apollo-client';
 import { ApolloLink } from 'apollo-link';
 import { HttpLink } from 'apollo-link-http';
-import WebSocketLink from 'apollo-link-ws';
+import { WebSocketLink } from 'apollo-link-ws';
+import { setContext } from 'apollo-link-context';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { getOperationAST } from 'graphql';
 
-const httpUri = 'http://localhost:3000/graphql';
-const wsUri = 'ws://localhost:3000/subscriptions';
+const httpUri = Meteor.absoluteUrl('graphql'); // http://localhost:3000/graphql
+const wsUri = Meteor.absoluteUrl('subscriptions').replace(/^http/, 'ws'); // ws://localhost:3000/subscriptions
 
 const link = ApolloLink.split(
     operation => {
@@ -17,18 +18,37 @@ const link = ApolloLink.split(
         uri: wsUri,
         options: {
             reconnect: true, //auto-reconnect
+            connectionParams: {
+                // getMeteorLoginToken = get the Meteor current user login token from local storage
+                authToken: localStorage.getItem("Meteor.loginToken")
+            },
             // // carry login state (should use secure websockets (wss) when using this)
             // connectionParams: {
             //   authToken: localStorage.getItem("Meteor.loginToken")
             // }
         }
     }),
-    new HttpLink({ uri: httpUri })
+    new HttpLink({
+        uri: httpUri,
+        credentials: 'same-origin'
+    })
 );
+
+// const authLink = setContext((_, { headers }) => {
+//     // get the authentication token from local storage if it exists
+//     const token = localStorage.getItem('token');
+//     // return the headers to the context so httpLink can read them
+//     return {
+//         headers: {
+//             ...headers,
+//             authorization: token ? `Bearer ${token}` : "",
+//         }
+//     }
+// });
 
 const cache = new InMemoryCache(window.__APOLLO_STATE);
 
-const client = new ApolloClient({
+export const client = new ApolloClient({
     link,
     cache
 });
