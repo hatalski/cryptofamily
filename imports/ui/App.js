@@ -7,19 +7,16 @@ import GET_ACCOUNT from '../graphql-queries/getAccount.graphql';
 import GET_ACCOUNT_SUBSCRIPTION from '../graphql-queries/getAccountSubscription.graphql';
 import CREATE_ACCOUNT from '../graphql-queries/createAccount.graphql';
 
-const App = ({ currentAccount, refetch, accountLoading }) => (
+const App = ({ data }) => (
     <div className="App">
         <div className="App-block">
-            {accountLoading
+            {data.loading
                 ? <div>Loading...</div>
                 : <div className="App-content">
-                    <div>{currentAccount}</div>
-                
-                    <input type="text" value="" />
-                    <input type="password" value="" />
-                    {currentAccount
+                    <div>{console.log(data)}</div>
+                    {data
                         ? <div>
-                            <pre>{JSON.stringify(currentAccount, null, 2)}</pre>
+                            <pre>{JSON.stringify(data, null, 2)}</pre>
                             <button onClick={() => refetch()}>Refetch the query!</button>
                         </div>
                         : 'Please log in!'}
@@ -29,16 +26,9 @@ const App = ({ currentAccount, refetch, accountLoading }) => (
 );
 
 App.propTypes = {
-    currentAccount: PropTypes.object,
     hasErrors: PropTypes.bool,
-    refetch: PropTypes.func,
-    accountLoading: PropTypes.bool,
 };
 
-/*
- * We use the `graphql` higher order component to send the graphql query to our server
- * See for more information: http://dev.apollodata.com/react/
- */
 const withData = graphql(gql(GET_ACCOUNT), {
         options: (props) => ({
             variables: {
@@ -46,16 +36,6 @@ const withData = graphql(gql(GET_ACCOUNT), {
             },
         }),
     }
-    // destructure the default props to more explicit ones
-    // props: ({ data: { error, loading, id, refetch } }) => {
-    //     if (loading) return { accountLoading: true };
-    //     if (error) return { hasErrors: true };
-        
-    //     return {
-    //         currentAccount: account,
-    //         refetch,
-    //     };
-    // },
 );
 
 export default withData(App);

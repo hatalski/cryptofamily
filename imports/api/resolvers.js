@@ -8,7 +8,7 @@ const resolvers = {
         account(obj, args, context) {
             console.log('get account query');
             console.log(args);
-            const account = Accounts.findOne(args.id);
+            const account = Accounts.findOne({ _id: args.id });
             if (account) {
                 // Mongo stores id as _id, but our GraphQL API calls for id, so make it conform to the API
                 account.id = account._id;
