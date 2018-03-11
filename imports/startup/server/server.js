@@ -4,8 +4,8 @@ import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { WebApp } from 'meteor/webapp'; // Meteor-specific
 import { execute, subscribe } from 'graphql';
 
-import typeDefs from '/imports/api/schema.graphql';
-import resolvers from '/imports/api/resolvers';
+import typeDefs from '../../graphql-queries/schema.graphql';
+import resolvers from '../../api/resolvers';
 
 const schema = makeExecutableSchema({
     typeDefs,
@@ -26,8 +26,6 @@ new SubscriptionServer({
     onConnect: async (connectionParams, webSocket) => {
         // if a meteor login token is passed to the connection params from the client, 
         // add the current user to the subscription context
-        console.log("connected to subscription server");
-        console.log(connectionParams);
         const subscriptionContext = connectionParams.authToken
             ? await addCurrentUserToContext(context, connectionParams.authToken)
             : context;

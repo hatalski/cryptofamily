@@ -7,14 +7,14 @@ import GET_ACCOUNT from '../graphql-queries/getAccount.graphql';
 import GET_ACCOUNT_SUBSCRIPTION from '../graphql-queries/getAccountSubscription.graphql';
 import CREATE_ACCOUNT from '../graphql-queries/createAccount.graphql';
 
-import Loading from './Loading';
-
 const App = ({ currentAccount, refetch, accountLoading }) => (
     <div className="App">
         <div className="App-block">
             {accountLoading
-                ? <Loading />
+                ? <div>Loading...</div>
                 : <div className="App-content">
+                    <div>{currentAccount}</div>
+                
                     <input type="text" value="" />
                     <input type="password" value="" />
                     {currentAccount
@@ -39,7 +39,7 @@ App.propTypes = {
  * We use the `graphql` higher order component to send the graphql query to our server
  * See for more information: http://dev.apollodata.com/react/
  */
-const withData = graphql(GET_ACCOUNT, {
+const withData = graphql(gql(GET_ACCOUNT), {
         options: (props) => ({
             variables: {
                 id: "oGuwFj8uPeq3kECEa",
