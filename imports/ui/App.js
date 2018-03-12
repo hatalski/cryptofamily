@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import GET_ACCOUNT from '../graphql-queries/getAccount.graphql';
-import GET_ACCOUNT_SUBSCRIPTION from '../graphql-queries/getAccountSubscription.graphql';
-import CREATE_ACCOUNT from '../graphql-queries/createAccount.graphql';
+import GET_ACCOUNT from './queries/getAccount.graphql';
+import GET_ACCOUNT_SUBSCRIPTION from './queries/getAccountSubscription.graphql';
+import CREATE_ACCOUNT from './queries/createAccount.graphql';
 
 const App = ({ data }) => (
     <div className="App">
