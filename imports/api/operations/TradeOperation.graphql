@@ -1,0 +1,43 @@
+enum TradeType {
+    BUY, SELL
+}
+
+type TradeOperation {
+    trader: Trader!
+    exchange: String!
+    exchangeInternalId: String
+    timestamp: String!
+    pair: String!
+    type: TradeType!
+    boughtAmount: Float!
+    soldAmount: Float!
+    rate: Float!
+    fee: Float
+    comment: String
+}
+
+input OperationInput {
+    exchange: String!
+    exchangeInternalId: String
+    timestamp: String!
+    pair: String!
+    type: TradeType!
+    boughtAmount: Float!
+    soldAmount: Float!
+    rate: Float!
+    fee: Float
+    comment: String
+}
+
+extend type Query {
+    operations: [TradeOperation]
+    operation: TradeOperation
+}
+
+extend type Mutation {
+    createTradeOperation(input: OperationInput): TradeOperation
+}
+
+extend type Subscription {
+    tradeOperationCreated(operation: OperationInput!): TradeOperation
+}

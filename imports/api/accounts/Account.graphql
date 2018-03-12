@@ -1,0 +1,39 @@
+type Account {
+    id: ID!
+    publicKey: String!
+    nounce: String
+    hashedPassword: String
+}
+
+# Type returned when the user logs in
+type LoginMethodResponse {
+  # Id of the account authenticated
+  id: String!
+  # Token of the connection
+  token: String!
+  # Expiration date for the token
+  tokenExpires: Float!
+  # The logged in account user
+  account: Account
+}
+
+# A hashsed password
+input HashedPassword {
+  # The hashed password
+  digest: String!
+  # Algorithm used to hash the password
+  algorithm: String!
+}
+
+type Query {
+    account(id: ID!): Account
+}
+
+type Mutation {
+    createAccount(publicKey: String, password: HashedPassword): Account
+    loginWithPassword(publicKey: String, password: HashedPassword): LoginMethodResponse
+}
+
+type Subscription {
+	accountCreated(publicKey: String, password: HashedPassword): Account
+}

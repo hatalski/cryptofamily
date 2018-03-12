@@ -1,0 +1,53 @@
+enum TransactionType {
+    DEPOSIT, WITHDRAWAL
+}
+
+type Address {
+    owner: Trader!
+    address: String!
+}
+
+type Trader {
+    nick: String!
+}
+
+type Transaction {
+    id: ID!,
+    account: Account!
+    trader: Trader!
+    timestamp: String!
+    transactionId: String!
+    symbol: String!
+    addressFrom: Address!
+    addressTo: Address!
+    amount: Float!
+    fee: Float!
+    status: String
+    type: TransactionType!
+}
+
+input TransactionInput {
+    transactionId: String!
+    timestamp: String!
+    symbol: String!
+    addressFrom: String! 
+    addressTo: String!
+    amount: Float!
+    fee: Float!
+    status: String
+    type: String!
+}
+
+
+extend type Query {
+    transaction: Transaction
+    transactions: [Transaction]
+}
+
+extend type Mutation {
+    createTransaction(input: TransactionInput!): Transaction
+}
+
+extend type Subscription {
+    transactionCreated(transaction: TransactionInput!): Transaction
+}

@@ -23,6 +23,7 @@
     "graphql-subscriptions": "^0.5.8",
     "graphql-tag": "^2.8.0",
     "graphql-tools": "^2.21.0",
+    "lodash": "^4.17.5",
     "meteor-node-stubs": "^0.3.2",
     "npm": "^5.7.1",
     "react": "^16.2.0",

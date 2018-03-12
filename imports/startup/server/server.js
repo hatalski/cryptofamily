@@ -3,9 +3,21 @@ import { makeExecutableSchema } from 'graphql-tools';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { WebApp } from 'meteor/webapp'; // Meteor-specific
 import { execute, subscribe } from 'graphql';
+import merge from "lodash/merge";
 
-import typeDefs from '../../graphql-queries/schema.graphql';
-import resolvers from '../../api/resolvers';
+import AccountsSchema from "../../api/accounts/Account.graphql";
+import AccountsResolvers from "../../api/accounts/resolvers";
+import OperationsSchema from "../../api/operations/TradeOperation.graphql";
+import OperationsResolvers from "../../api/operations/resolvers";
+import TransactionsSchema from "../../api/transactions/Transaction.graphql";
+import TransactionsResolvers from "../../api/transactions/resolvers";
+
+const typeDefs = [AccountsSchema, OperationsSchema, TransactionsSchema];
+const resolvers = merge(
+  AccountsResolvers,
+  OperationsResolvers,
+  TransactionsResolvers
+);
 
 const schema = makeExecutableSchema({
     typeDefs,
