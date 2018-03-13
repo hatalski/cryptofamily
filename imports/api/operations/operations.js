@@ -1,5 +1,5 @@
-import { Mongo } from "meteor/mongo";
+import { Mongo } from 'meteor/mongo';
 
-const TradeOperations = new Mongo.Collection("operations");
+const TradeOperations = new Mongo.Collection('operations');
 
 export default TradeOperations;

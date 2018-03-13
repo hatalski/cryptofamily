@@ -10,28 +10,28 @@ const httpUri = Meteor.absoluteUrl('graphql'); // http://localhost:3000/graphql
 const wsUri = Meteor.absoluteUrl('subscriptions').replace(/^http/, 'ws'); // ws://localhost:3000/subscriptions
 
 const link = ApolloLink.split(
-    operation => {
-        const operationAST = getOperationAST(operation.query, operation.operationName);
-        return !!operationAST && operationAST.operation === 'subscription';
+  (operation) => {
+    const operationAST = getOperationAST(operation.query, operation.operationName);
+    return !!operationAST && operationAST.operation === 'subscription';
+  },
+  new WebSocketLink({
+    uri: wsUri,
+    options: {
+      reconnect: true, // auto-reconnect
+      connectionParams: {
+        // getMeteorLoginToken = get the Meteor current user login token from local storage
+        authToken: localStorage.getItem('Meteor.loginToken'),
+      },
+      // // carry login state (should use secure websockets (wss) when using this)
+      // connectionParams: {
+      //   authToken: localStorage.getItem("Meteor.loginToken")
+      // }
     },
-    new WebSocketLink({
-        uri: wsUri,
-        options: {
-            reconnect: true, //auto-reconnect
-            connectionParams: {
-                // getMeteorLoginToken = get the Meteor current user login token from local storage
-                authToken: localStorage.getItem("Meteor.loginToken")
-            },
-            // // carry login state (should use secure websockets (wss) when using this)
-            // connectionParams: {
-            //   authToken: localStorage.getItem("Meteor.loginToken")
-            // }
-        }
-    }),
-    new HttpLink({
-        uri: httpUri,
-        credentials: 'same-origin'
-    })
+  }),
+  new HttpLink({
+    uri: httpUri,
+    credentials: 'same-origin',
+  }),
 );
 
 // const authLink = setContext((_, { headers }) => {
@@ -48,7 +48,7 @@ const link = ApolloLink.split(
 
 const cache = new InMemoryCache(window.__APOLLO_STATE);
 
-export const client = new ApolloClient({
-    link,
-    cache
+export default client = new ApolloClient({
+  link,
+  cache,
 });

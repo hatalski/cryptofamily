@@ -1,4 +1,4 @@
-import gql from "graphql-tag";
+import gql from 'graphql-tag';
 
 export default gql`
     enum TransactionType {
@@ -50,7 +50,7 @@ export default gql`
         createTransaction(symbol: String!, amount: Float!): Transaction
     }
 
-    # extend type Subscription {
-    #     transactionCreated(transaction: Transaction!): Transaction
-    # }
+    extend type Subscription {
+        transactionCreated(transactionId: ID!): Transaction
+    }
 `;

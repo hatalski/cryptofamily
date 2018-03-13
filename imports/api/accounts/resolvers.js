@@ -1,12 +1,10 @@
-import { withFilter } from "graphql-subscriptions"; // will narrow down the changes subscriptions listen to
-import { pubsub, pubsubRedis } from "../subscriptions"; // import pubsub object for subscriptions to work
+import { withFilter } from 'graphql-subscriptions'; // will narrow down the changes subscriptions listen to
+import { pubsub, pubsubRedis } from '../subscriptions'; // import pubsub object for subscriptions to work
 import Accounts from './accounts'; // Meteor-specific for doing database queries
 
 const resolvers = {
   Query: {
     account(obj, args, context) {
-      console.log("get account query");
-      console.log(args);
       const account = Accounts.findOne({ _id: args.id });
       if (account) {
         // Mongo stores id as _id, but our GraphQL API calls for id, so make it conform to the API
@@ -14,23 +12,26 @@ const resolvers = {
         delete account._id;
       }
       return account;
-    }
+    },
   },
 
   Mutation: {
     createAccount(obj, args, context) {
-      // You'll probably want to validate the args first in production, and possibly check user credentials using context
-      args.id = Accounts.insert({
+      // You'll probably want to validate the args first in production,
+      // and possibly check user credentials using context
+      const newAccountId = Accounts.insert({
         publicKey: args.publicKey,
-        hashedPassword: args.hashedPassword
+        hashedPassword: args.hashedPassword,
       });
-      pubsubRedis.publish("accountCreated", {
-        accountCreated: { id: args.id }
+      pubsubRedis.publish('accountCreated', {
+        accountCreated: { id: newAccountId },
       }); // trigger a change to all subscriptions to this person
       // Note: You must publish the object with the subscription name nested in the object!
       // See: https://github.com/apollographql/graphql-subscriptions/issues/51
-      return args;
-    }
+
+      const newAccount = Accounts.findOne(newAccountId);
+      return newAccount;
+    },
   },
 
   Subscription: {
@@ -41,13 +42,11 @@ const resolvers = {
       // PubSub is not recommended for production because it won't work if you have multiple servers
       // withFilter makes it so you can only listen to changes to this person instead of all people
       subscribe: withFilter(
-        () => pubsubRedis.asyncIterator("accountCreated"),
-        (payload, args) => {
-          return payload.accountCreated;
-        }
-      )
-    }
-  }
+        () => pubsubRedis.asyncIterator('accountCreated'),
+        (payload, args) => payload.accountCreated,
+      ),
+    },
+  },
 };
 
 export default resolvers;

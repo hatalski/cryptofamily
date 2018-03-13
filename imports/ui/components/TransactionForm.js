@@ -1,8 +1,6 @@
-import React, { Component } from "react";
-import gql from "graphql-tag";
-import { graphql } from "react-apollo";
-
-//import createTransaction from "../queries/createTransaction.graphql";
+import React, { Component } from 'react';
+import gql from 'graphql-tag';
+import { graphql } from 'react-apollo';
 
 const createTransaction = gql`
   mutation createTransaction($symbol: String!, $amount: Float!) {
@@ -14,32 +12,34 @@ const createTransaction = gql`
   }
 `;
 
-
 class TransactionForm extends Component {
-    submitForm = () => {
-        this.props.createTransaction({
-            variables: {
-                symbol: this.symbol.value,
-                amount: this.amount.value
-            }
-        }).then(({ data }) => {
-            this.props.refetch();
-        }).catch(error => {
-            console.log(error);
-        });
-    }
+  submitForm = () => {
+    this.props
+      .createTransaction({
+        variables: {
+          symbol: this.symbol.value,
+          amount: this.amount.value,
+        },
+      })
+      .then(({ data }) => {
+        this.props.refetch();
+      })
+      .catch((error) => {
+        console.warn(error); // eslint-disable-line no-console
+      });
+  };
 
-    render() {  
-        return (
-          <div>
-            <input type="text" ref={input => (this.symbol = input)} />
-            <input type="text" ref={input => (this.amount = input)} />
-            <button onClick={this.submitForm}>Create</button>
-          </div>
-        );
-    }
+  render() {
+    return (
+      <div>
+        <input type="text" ref={input => (this.symbol = input)} />
+        <input type="text" ref={input => (this.amount = input)} />
+        <button onClick={this.submitForm}>Create</button>
+      </div>
+    );
+  }
 }
 
 export default graphql(createTransaction, {
-  name: "createTransaction"
+  name: 'createTransaction',
 })(TransactionForm);
