@@ -7,49 +7,49 @@ const resolvers = {
   Query: {
     transactions(obj, args, context) {
       console.log("get transactions");
-      // const transactions = [
-      //     { id: "txid1", timestamp: "234454353", addressFrom: "te", addressTo: "to" },
-      //     { id: "txid2", timestamp:"1234454353", addressFrom: "yelo", addressTo: "helo" },
-      // ];
       const transactions = Transactions.find({}).fetch();
+      console.log(transactions);
       return transactions;
     }
   },
 
   Mutation: {
     createTransaction(obj, args, context) {
-      args.id = Transactions.insert({
-        createdAt: Date.now(),
-        updatedAt: Date.now(),
-        transactionId: args.transactionId,
-        timestamp: args.timestamp,
+      console.log("server create transaction mutation");
+      const newTransactionId = Transactions.insert({
+        //createdAt: Date.now(),
+        //updatedAt: Date.now(),
+        //transactionId: args.transactionId,
+        //timestamp: args.timestamp,
         symbol: args.symbol,
-        addressFrom: args.addressFrom,
-        addressTo: args.addressTo,
+        //addressFrom: args.addressFrom,
+        //addressTo: args.addressTo,
         amount: args.amount,
-        fee: args.fee,
-        status: args.status,
-        type: args.type
+        //fee: args.fee,
+        //status: args.status,
+        //type: args.type
       });
 
-      pubsubRedis.publish("transactionCreated", {
-        transactionAdded: { id: args.id }
-      });
+      const newTransaction = Transactions.findOne(newTransactionId);
 
-      return args;
-    }
-  },
+      // pubsubRedis.publish("transactionCreated", {
+      //   transactionAdded: { transaction: newTransaction }
+      // });
 
-  Subscription: {
-    transactionCreated: {
-      subscribe: withFilter(
-        () => pubsubRedis.asyncIterator("transactionCreated"),
-        (payload, args) => {
-          return (payload.transactionCreated.id === args.id);
-        }
-      )
+      return newTransaction;
     }
-  }
+  }//,
+
+  // Subscription: {
+  //   transactionCreated: {
+  //     subscribe: withFilter(
+  //       () => pubsubRedis.asyncIterator("transactionCreated"),
+  //       (payload, args) => {
+  //         return payload.transactionCreated.id === args.transaction.id;
+  //       }
+  //     )
+  //   }
+  // }
 };
 
 export default resolvers;

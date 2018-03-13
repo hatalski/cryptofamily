@@ -1,0 +1,7 @@
+mutation createTransaction($symbol: String!, $amount: Float!) {
+  createTransaction(symbol: $symbol, amount: $amount) {
+    _id
+    symbol
+    amount
+  }
+}

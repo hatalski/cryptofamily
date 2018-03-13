@@ -9,7 +9,7 @@ import AccountsSchema from "../../api/accounts/Account.graphql";
 import AccountsResolvers from "../../api/accounts/resolvers";
 import OperationsSchema from "../../api/operations/TradeOperation.graphql";
 import OperationsResolvers from "../../api/operations/resolvers";
-import TransactionsSchema from "../../api/transactions/Transaction.graphql";
+import TransactionsSchema from "../../api/transactions/Transaction.graphql.js";
 import TransactionsResolvers from "../../api/transactions/resolvers";
 
 const typeDefs = [AccountsSchema, OperationsSchema, TransactionsSchema];

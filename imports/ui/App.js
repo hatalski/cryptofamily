@@ -3,39 +3,32 @@ import PropTypes from 'prop-types';
 import { graphql } from 'react-apollo';
 import gql from 'graphql-tag';
 
-import GET_ACCOUNT from './queries/getAccount.graphql';
-import GET_ACCOUNT_SUBSCRIPTION from './queries/getAccountSubscription.graphql';
-import CREATE_ACCOUNT from './queries/createAccount.graphql';
+import TransactionForm from "./components/TransactionForm";
 
-const App = ({ data }) => (
-    <div className="App">
-        <div className="App-block">
-            {data.loading
-                ? <div>Loading...</div>
-                : <div className="App-content">
-                    <div>{console.log(data)}</div>
-                    {data
-                        ? <div>
-                            <pre>{JSON.stringify(data, null, 2)}</pre>
-                            <button onClick={() => refetch()}>Refetch the query!</button>
-                        </div>
-                        : 'Please log in!'}
-                  </div>}
+const App = ({ data }) => {
+    if (data.loading) return null;
+    
+    return (
+        <div>
+            <h1>Crypto Family Alpha</h1>
+            <TransactionForm refetch={data.refetch} />
+            <ul>
+            {data.transactions.map(trx => (
+                <li key={trx._id}>{trx.symbol} - {trx.amount}</li>
+            ))}
+            </ul>
         </div>
-    </div>
-);
-
-App.propTypes = {
-    hasErrors: PropTypes.bool,
+    );
 };
 
-const withData = graphql(gql(GET_ACCOUNT), {
-        options: (props) => ({
-            variables: {
-                id: "oGuwFj8uPeq3kECEa",
-            },
-        }),
+const getTransactions = gql`
+    {
+        transactions {
+            _id
+            symbol
+            amount
+        }
     }
-);
+`;
 
-export default withData(App);
+export default graphql(getTransactions)(App);
