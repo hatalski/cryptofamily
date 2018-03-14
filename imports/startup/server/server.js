@@ -1,4 +1,4 @@
-// file version 0.2
+// file version 0.5
 
 import { createApolloServer, addCurrentUserToContext } from 'meteor/apollo';
 import { WebApp } from 'meteor/webapp'; // Meteor-specific
@@ -8,9 +8,11 @@ import { execute, subscribe } from 'graphql';
 import { importSchema } from 'graphql-import';
 import merge from 'lodash/merge';
 
+import UsersSchema from '../../api/schema/User.graphql';
 import AccountsSchema from '../../api/schema/Account.graphql';
 import OperationsSchema from '../../api/schema/TradeOperation.graphql';
 import TransactionsSchema from '../../api/schema/Transaction.graphql';
+import UsersResolvers from '../../api/users/resolvers';
 import AccountsResolvers from '../../api/accounts/resolvers';
 import OperationsResolvers from '../../api/operations/resolvers';
 import TransactionsResolvers from '../../api/transactions/resolvers';
@@ -18,8 +20,13 @@ import TransactionsResolvers from '../../api/transactions/resolvers';
 // const typeDefsImport = importSchema('../../api/schema/Account.graphql');
 // console.log(typeDefsImport); // eslint-disable-line no-console
 
-const typeDefs = [AccountsSchema, OperationsSchema, TransactionsSchema];
-const resolvers = merge(AccountsResolvers, OperationsResolvers, TransactionsResolvers);
+const typeDefs = [AccountsSchema, UsersSchema, OperationsSchema, TransactionsSchema];
+const resolvers = merge(
+  UsersResolvers,
+  AccountsResolvers,
+  OperationsResolvers,
+  TransactionsResolvers,
+);
 
 const schema = makeExecutableSchema({
   typeDefs,

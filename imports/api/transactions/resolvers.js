@@ -5,14 +5,15 @@ import Transactions from './transactions';
 
 const resolvers = {
   Query: {
-    transactions(obj, args, context) {
-      const transactions = Transactions.find({}).fetch();
-      return transactions;
+    transactions(obj, args, { userId }) {
+      return Transactions.find({
+        userId,
+      }).fetch();
     },
   },
 
   Mutation: {
-    createTransaction(obj, args, context) {
+    createTransaction(obj, args, { userId }) {
       const newTransactionId = Transactions.insert({
         // createdAt: Date.now(),
         // updatedAt: Date.now(),
@@ -22,6 +23,7 @@ const resolvers = {
         // addressFrom: args.addressFrom,
         // addressTo: args.addressTo,
         amount: args.amount,
+        userId,
         // fee: args.fee,
         // status: args.status,
         // type: args.type

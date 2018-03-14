@@ -12,6 +12,7 @@ module.exports = {
     'import/no-unresolved': 0,
     'no-undef': 0,
     'arrow-body-style': 0,
-    'no-return-assign': 0
+    'no-return-assign': 0,
+    'react/prefer-stateless-function': 0
   },
 };
