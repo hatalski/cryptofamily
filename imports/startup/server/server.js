@@ -1,16 +1,22 @@
+// file version 0.2
+
 import { createApolloServer, addCurrentUserToContext } from 'meteor/apollo';
 import { WebApp } from 'meteor/webapp'; // Meteor-specific
 import { makeExecutableSchema } from 'graphql-tools';
 import { SubscriptionServer } from 'subscriptions-transport-ws';
 import { execute, subscribe } from 'graphql';
+import { importSchema } from 'graphql-import';
 import merge from 'lodash/merge';
 
-import AccountsSchema from '../../api/accounts/Account.graphql';
+import AccountsSchema from '../../api/schema/Account.graphql';
+import OperationsSchema from '../../api/schema/TradeOperation.graphql';
+import TransactionsSchema from '../../api/schema/Transaction.graphql';
 import AccountsResolvers from '../../api/accounts/resolvers';
-import OperationsSchema from '../../api/operations/TradeOperation.graphql';
 import OperationsResolvers from '../../api/operations/resolvers';
-import TransactionsSchema from '../../api/transactions/TransactionSchema';
 import TransactionsResolvers from '../../api/transactions/resolvers';
+
+// const typeDefsImport = importSchema('../../api/schema/Account.graphql');
+// console.log(typeDefsImport); // eslint-disable-line no-console
 
 const typeDefs = [AccountsSchema, OperationsSchema, TransactionsSchema];
 const resolvers = merge(AccountsResolvers, OperationsResolvers, TransactionsResolvers);

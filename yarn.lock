@@ -3901,6 +3901,10 @@ react-dom@^16.2.0:
     object-assign "^4.1.1"
     prop-types "^15.6.0"
 
+react-powerplug@^0.1.5:
+  version "0.1.5"
+  resolved "https://registry.yarnpkg.com/react-powerplug/-/react-powerplug-0.1.5.tgz#f3dd7612c60efc55b6c7a2ddee284a8bcb6db783"
+
 react@^16.2.0:
   version "16.2.0"
   resolved "https://registry.yarnpkg.com/react/-/react-16.2.0.tgz#a31bd2dab89bff65d42134fa187f24d054c273ba"
