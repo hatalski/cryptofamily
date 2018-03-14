@@ -21,9 +21,6 @@ class TransactionForm extends Component {
           amount: this.amount.value,
         },
       })
-      .then(({ data }) => {
-        this.props.refetch();
-      })
       .catch((error) => {
         console.warn(error); // eslint-disable-line no-console
       });
@@ -42,4 +39,7 @@ class TransactionForm extends Component {
 
 export default graphql(createTransaction, {
   name: 'createTransaction',
+  options: {
+    refetchQueries: ['Transactions'],
+  },
 })(TransactionForm);

@@ -4,29 +4,33 @@ import gql from 'graphql-tag';
 
 import TransactionForm from './components/TransactionForm';
 
-const App = ({ data }) => {
-  if (data.loading) return null;
+const App = ({ loading, transactions }) => {
+  if (loading) return null;
   return (
     <div>
       <h1>Crypto Family Alpha</h1>
-      <TransactionForm refetch={data.refetch} />
+      <TransactionForm />
       <ul>
-        {data.transactions.map(trx => (
-          <li key={trx._id}>{trx.symbol} - {trx.amount}</li>
-            ))}
+        {transactions.map(trx => (
+          <li key={trx._id}>
+            {trx.symbol} - {trx.amount}
+          </li>
+        ))}
       </ul>
     </div>
   );
 };
 
-const getTransactions = gql`
-    {
-        transactions {
-            _id
-            symbol
-            amount
-        }
+const transactionsQuery = gql`
+  query Transactions {
+    transactions {
+      _id
+      symbol
+      amount
     }
+  }
 `;
 
-export default graphql(getTransactions)(App);
+export default graphql(transactionsQuery, {
+  props: ({ data }) => ({ ...data }),
+})(App);
