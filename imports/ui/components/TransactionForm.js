@@ -3,11 +3,16 @@ import gql from 'graphql-tag';
 import { graphql } from 'react-apollo';
 
 const createTransaction = gql`
-  mutation createTransaction($symbol: String!, $amount: Float!) {
-    createTransaction(symbol: $symbol, amount: $amount) {
+  mutation createTransaction($transaction: TransactionInput!) {
+    createTransaction(transaction: $transaction) {
       _id
-      symbol
+      transactionId
+      currency
       amount
+      fee
+      addressFrom
+      addressTo
+      timestamp
     }
   }
 `;
@@ -17,8 +22,15 @@ class TransactionForm extends Component {
     this.props
       .createTransaction({
         variables: {
-          symbol: this.symbol.value,
-          amount: this.amount.value,
+          transaction: {
+            currency: this.currency.value,
+            transactionId: this.transactionId.value,
+            amount: this.amount.value,
+            fee: this.fee.value,
+            addressFrom: this.addressFrom.value,
+            addressTo: this.addressTo.value,
+            timestamp: this.timestamp.value,
+          },
         },
       })
       .catch((error) => {
@@ -29,8 +41,13 @@ class TransactionForm extends Component {
   render() {
     return (
       <div>
-        <input type="text" ref={input => (this.symbol = input)} />
-        <input type="text" ref={input => (this.amount = input)} />
+        <input type="text" ref={input => (this.currency = input)} />
+        <input type="text" ref={input => (this.transactionId = input)} />
+        <input type="number" ref={input => (this.amount = input)} />
+        <input type="number" ref={input => (this.fee = input)} />
+        <input type="text" ref={input => (this.addressFrom = input)} />
+        <input type="text" ref={input => (this.addressTo = input)} />
+        <input type="datetime-local" ref={input => (this.timestamp = input)} />
         <button onClick={this.submitForm}>Create</button>
       </div>
     );

@@ -13,20 +13,29 @@ const resolvers = {
   },
 
   Mutation: {
-    createTransaction(obj, args, { userId }) {
+    createTransaction(obj, { transaction }, { userId }) {
+      check(transaction, {
+        currency: String,
+        amount: Number,
+        transactionId: String,
+        addressFrom: String,
+        addressTo: String,
+        fee: Number,
+        timestamp: String, // no date type in graphql
+      });
+      check(userId, String);
       const newTransactionId = Transactions.insert({
-        // createdAt: Date.now(),
-        // updatedAt: Date.now(),
-        // transactionId: args.transactionId,
-        // timestamp: args.timestamp,
-        symbol: args.symbol,
-        // addressFrom: args.addressFrom,
-        // addressTo: args.addressTo,
-        amount: args.amount,
+        createdAt: Date.now(),
+        updatedAt: Date.now(),
+        transactionId: transaction.transactionId,
+        timestamp: transaction.timestamp,
+        currency: transaction.currency,
+        addressFrom: transaction.addressFrom,
+        addressTo: transaction.addressTo,
+        amount: transaction.amount,
+        fee: transaction.fee,
         userId,
-        // fee: args.fee,
         // status: args.status,
-        // type: args.type
       });
 
       const newTransaction = Transactions.findOne(newTransactionId);

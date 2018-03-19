@@ -1,5 +1,5 @@
-enum TransactionType {
-    DEPOSIT, WITHDRAWAL
+enum TransactionStatus {
+    UNCONFIRMED, CONFIRMED
 }
 
 type Address {
@@ -13,30 +13,26 @@ type Trader {
 
 type Transaction {
     _id: String!
-    symbol: String!
+    transactionId: String!
+    currency: String!
     amount: Float!
-    #trader: Trader
-    #timestamp: String
-    #transactionId: String
-    #addressFrom: Address
-    #addressTo: Address
-    #fee: Float
-    #status: String
-    #type: TransactionType
+    addressFrom: String!
+    addressTo: String!
+    timestamp: String
+    fee: Float
+    status: TransactionStatus
 }
 
 input TransactionInput {
-    #transactionId: String
-    #timestamp: String
-    symbol: String!
-    #addressFrom: String 
-    #addressTo: String
+    transactionId: String!
+    currency: String!
     amount: Float!
-    #fee: Float
-    #status: String
-    #type: String
+    addressFrom: String!
+    addressTo: String!
+    timestamp: String!
+    fee: Float
+    status: TransactionStatus
 }
-
 
 extend type Query {
     transaction: Transaction
@@ -44,7 +40,8 @@ extend type Query {
 }
 
 extend type Mutation {
-    createTransaction(symbol: String!, amount: Float!): Transaction
+    createTransaction(transaction: TransactionInput!): Transaction
+    # createTransaction(symbol: String!, amount: Float!): Transaction
 }
 
 extend type Subscription {

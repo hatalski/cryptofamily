@@ -37,7 +37,7 @@ const App = ({
       <ul>
         {transactions.map(trx => (
           <li key={trx._id}>
-            {trx.symbol} - {trx.amount}
+            {trx.currency} - {trx.amount}
           </li>
         ))}
       </ul>
@@ -49,7 +49,7 @@ const transactionsQuery = gql`
   query Transactions {
     transactions {
       _id
-      symbol
+      currency
       amount
     }
     user {

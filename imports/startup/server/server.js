@@ -1,4 +1,4 @@
-// file version 0.5
+// file version 0.6
 
 import { createApolloServer, addCurrentUserToContext } from 'meteor/apollo';
 import { WebApp } from 'meteor/webapp'; // Meteor-specific
